@@ -82,8 +82,19 @@ class Finnhub():
                 # Create target excel filename
                 target_file_path = target_path + self.create_filename(symbol, from_date, to_date, interval_part, 'xlsx')
 
+                # Introduce a sleep if the max calls limit has been reached (60/min)
+                if limit_counter == 0:
+                    limit_counter = int(self._config['limit']['hour_limit']) - 1
+                    nu = datetime.datetime.now()
+                    delay = int((nu - batch_start_time).total_seconds()) + 1
+                    batch_start_time = nu
+                    hp.sleep_handler(delay)
+
                 # Write Excel file for the current Symbol - Interval combination
                 self.write_timeseries_to_excel(symbol, interval, from_date, to_date, target_file_path)
+
+                limit_counter -= 1
+
 
     def write_timeseries_to_excel(self, symbol, interval, from_date, to_date, target_file_path):
         """

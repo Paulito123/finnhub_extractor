@@ -24,7 +24,7 @@ def load_ticker_files():
     # from: datetime as from when data must be loaded. Format must be [yyyy-mm-dd hh:mi:ss]
     # to: datetime as to when data must be loaded. Format must be [yyyy-mm-dd hh:mi:ss]
     params = {'conf_file': 'config/finnhub_extractor.conf',
-              'filetype': ct.TickerFileType.CUSTOM,
+              'filetype': ct.TickerFileType.SP500,
               'ticker_file_path': 'sources/sp500_tickers.txt',
               'intervals': ['60', 'D'],
               'from': '2020-07-01 16:00:00',
@@ -38,9 +38,7 @@ def load_ticker_files():
 
     nq_obj = nq.Nasdaq(config)
     result = nq_obj.fetch_nq_ticker_file()
-    if result['status_code'] == -1:
-        hp.print_timestamped_text('Error copying nasdaq ticker file from ftp server.')
-        return
+
 
     fh = fc.Finnhub(config)
     fh.fetch_timeseries(params['filetype'],
