@@ -135,7 +135,7 @@ class Finnhub():
                 data.to_excel(writer, sheet_name=interval, index=False, columns=['t', 'o', 'h', 'l', 'c', 'v'])
 
                 # Return value
-                msg = 'Date for [{}:{}] successfully exported to excel.'.format(symbol, interval)
+                msg = 'Data for [{}:{}] successfully exported to excel'.format(symbol, interval)
                 return hp.generate_event_output(ct.EventType.NO_ERROR,
                                                 description=msg,
                                                 print_it=True)
