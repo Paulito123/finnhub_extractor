@@ -13,30 +13,25 @@ nasdaq tickers > ftp://ftp.nasdaqtrader.com/SymbolDirectory/nasdaqlisted.txt
 
 import configparser
 
-# The name of the config file that will be created or updated. File will be created in
-# the same directory where this script resides.
-main_config_file = 'finnhub_extractor.conf'
-
+# The path of the config file that will be created or updated.
+main_config_file = 'config/finnhub_extractor.conf'                                                              # Relative
 # Create a "Parser" object that will process the given configuration.
 config = configparser.ConfigParser()
 
+
 # Local configurations.
-config['local'] = {'target_path_xlsx': '/home/virtosa/raw_data/finnhub/xlsx'}
+config['local'] = {'target_path_xlsx': '/home/virtosa/raw_data/finnhub/xlsx'}                                   # Absolute
 
 # Keys needed to query Finnhub.io
-config['keys'] = {'key1': 'bs8vnevrh5re5dkf7e80',
-                  'key2': 'XXXX'}
+config['keys'] = {'key1': '',                                                                                   # Insert
+                  'secret1': ''}
 
-# Information related to the tickers to be iterated. filetype could be one of:
-#   custom  > Text file with only one column with the symbols, and NO HEADER!
-#   nasdaq  > Text file as it is downloaded from nasdaq ftp server, first column has the symbols.
-#   sp500   > Text file with tab delimiters, first column has the symbols. NO HEADER!
-config['ticker'] = {'source_path_ticker_file': 'sources/tickers.txt',
-                    'filetype': 'custom'}
+# Information related to the tickers to be iterated.
+config['ticker'] = {'source_path_ticker_file': 'sources/tickers.txt'}                                           # Relative
 
 # Path where the nasdaq ticker file can be downloaded and where it should be stored locally.
 config['nasdaq'] = {'source_path_ftp': 'ftp://ftp.nasdaqtrader.com/SymbolDirectory/nasdaqlisted.txt',
-                    'target_path': 'datafiles/nasdaqlisted.txt'}
+                    'target_path': '/home/virtosa/PycharmProjects/finnhub_extractor/sources/nasdaqlisted.txt'}  # Absolute
 
 # Download limits for Finnhub.io
 config['limit'] = {'day_limit': '0',

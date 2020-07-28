@@ -13,15 +13,20 @@ def load_ticker_files():
     '''
 
     # Parameters:
-    # conf_file: path to the configuration file.
+    # conf_file: path to the main configuration file.
     # filetype: could be one of:
-    #   custom  > Text file with only one column with the symbols, and NO HEADER!
-    #   nasdaq  > Text file as it is downloaded from nasdaq ftp server, first column has the symbols.
-    #   sp500   > Text file with tab delimiters, first column has the symbols. NO HEADER!
+    #   CUSTOM  > Text file with only one column with the symbols, and NO HEADER!
+    #   NASDAQ  > Text file as it is downloaded from nasdaq ftp server, first column has the symbols.
+    #   SP500   > Text file with tab delimiters, first column has the symbols. NO HEADER!
+    # ticker_file_path: the file path and filename of the ticker that will be used for downloading price data.
+    # intervals: the list of intervals that are to be loaded. Possible values:
+    #   ['1', '5', '15', '30', '60', 'D', 'W', 'M']
+    # from: datetime as from when data must be loaded. Format must be [yyyy-mm-dd hh:mi:ss]
+    # to: datetime as to when data must be loaded. Format must be [yyyy-mm-dd hh:mi:ss]
     params = {'conf_file': 'config/finnhub_extractor.conf',
-              'filetype': ct.TickerFileType.SP500,
+              'filetype': ct.TickerFileType.CUSTOM,
               'ticker_file_path': 'sources/sp500_tickers.txt',
-              'intervals': ["60", "D"],
+              'intervals': ['60', 'D'],
               'from': '2020-07-01 16:00:00',
               'to': '2020-07-03 00:00:00'}
 
@@ -35,7 +40,7 @@ def load_ticker_files():
     result = nq_obj.fetch_nq_ticker_file()
     if result['status_code'] == -1:
         hp.print_timestamped_text('Error copying nasdaq ticker file from ftp server.')
-        quit()
+        return
 
     fh = fc.Finnhub(config)
     fh.fetch_timeseries(params['filetype'],
