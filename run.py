@@ -21,14 +21,16 @@ def load_ticker_files():
     # ticker_file_path: the file path and filename of the ticker that will be used for downloading price data.
     # intervals: the list of intervals that are to be loaded. Possible values:
     #   ['1', '5', '15', '30', '60', 'D', 'W', 'M']
+    # Additionally ['2H', '4H'] can be derived (resampled) from a lower interval. Just put the lower interval
+    # before the derived one. For example: ['60', '2H', '4H']
     # from: datetime as from when data must be loaded. Format must be [yyyy-mm-dd hh:mi:ss]
     # to: datetime as to when data must be loaded. Format must be [yyyy-mm-dd hh:mi:ss]
     params = {'conf_file': 'config/finnhub_extractor.conf',
-              'filetype': ct.TickerFileType.SP500,
-              'ticker_file_path': 'sources/sp500_tickers.txt',
-              'intervals': ['60', 'D'],
+              'filetype': ct.TickerFileType.CUSTOM,
+              'ticker_file_path': 'sources/tickers.txt',
+              'intervals': ['1', '2H'],
               'from': '2020-07-01 16:00:00',
-              'to': '2020-07-03 00:00:00'}
+              'to': '2020-07-07 00:00:00'}
 
     # Load configurations
     project_dir = os.path.dirname(os.path.abspath(__file__))
@@ -36,9 +38,9 @@ def load_ticker_files():
     config = configparser.ConfigParser()
     config.read(conf_file)
 
-    nq_obj = nq.Nasdaq(config)
-    result = nq_obj.fetch_nq_ticker_file()
-
+    if params['filetype'] == ct.TickerFileType.NASDAQ:
+        nq_obj = nq.Nasdaq(config)
+        nq_obj.fetch_nq_ticker_file()
 
     fh = fc.Finnhub(config)
     fh.fetch_timeseries(params['filetype'],
@@ -46,7 +48,6 @@ def load_ticker_files():
                         params['intervals'],
                         params['from'],
                         params['to'])
-
 
 # From here on starts the code that is actually being executed:
 if __name__ == "__main__":
